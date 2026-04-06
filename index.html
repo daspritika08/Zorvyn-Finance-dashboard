@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Finance Dashboard</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav id="navbar">
+    <div class="nav-container">
+      <div class="nav-left">
+        <button id="menu-btn" aria-label="Toggle sidebar">
+          <span class="material-icons-sharp">menu</span>
+        </button>
+        <img src="./images/logo.png" class="logo" alt="Logo">
+      </div>
+      <div class="search-bar">
+        <span class="material-icons-sharp">search</span>
+        <input type="search" placeholder="Search transactions…" id="search-input">
+      </div>
+      <div class="profile-area">
+        <button id="theme-toggle" aria-label="Toggle theme">
+          <span class="material-icons-sharp" id="theme-icon">dark_mode</span>
+        </button>
+        <select id="role-select" aria-label="Select role">
+          <option value="viewer">Viewer</option>
+          <option value="admin">Admin</option>
+        </select>
+        <div class="profile">
+          <img src="./images/profile-1.jpg" alt="Profile Picture">
+          <span class="profile-name">John Doe</span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  
+  <div id="sidebar-overlay"></div>
+
+  
+  <aside id="sidebar">
+    <ul class="nav-links">
+      <li class="nav-link active" data-view="dashboard">
+        <span class="material-icons-sharp">dashboard</span>
+        <span>Dashboard</span>
+      </li>
+      <li class="nav-link" data-view="transactions">
+        <span class="material-icons-sharp">receipt_long</span>
+        <span>Transactions</span>
+      </li>
+      <li class="nav-link" data-view="analytics">
+        <span class="material-icons-sharp">bar_chart</span>
+        <span>Analytics</span>
+      </li>
+      <li class="nav-link" data-view="settings">
+        <span class="material-icons-sharp">settings</span>
+        <span>Settings</span>
+      </li>
+    </ul>
+  </aside>
+
+ 
+  <main id="main-content">
+
+   
+    <div id="storage-banner" class="banner hidden">
+      <span class="material-icons-sharp">warning</span>
+      localStorage unavailable — data will not persist across reloads.
+      <button onclick="this.parentElement.classList.add('hidden')">✕</button>
+    </div>
+
+    
+    <div class="view" id="view-dashboard">
+
+      
+      <div class="greeting-banner">
+        <div class="greeting-text">
+          <h1 id="greeting-text">Good morning, John 👋</h1>
+          <p>Here's what's happening with your finances today.</p>
+        </div>
+        <div class="greeting-emoji">💰</div>
+      </div>
+
+     
+      <section class="summary-cards" id="summary-cards">
+        <div class="card summary-card" id="card-balance">
+          <div class="card-icon" style="background:rgba(115,128,236,0.15)">
+            <span class="material-icons-sharp" style="color:var(--color-primary)">account_balance_wallet</span>
+          </div>
+          <div class="card-info">
+            <h3 id="val-balance">$0.00</h3>
+            <p>Total Balance</p>
+          </div>
+        </div>
+        <div class="card summary-card" id="card-income">
+          <div class="card-icon" style="background:rgba(65,241,182,0.15)">
+            <span class="material-icons-sharp" style="color:var(--color-success)">trending_up</span>
+          </div>
+          <div class="card-info">
+            <h3 id="val-income">$0.00</h3>
+            <p>Total Income</p>
+          </div>
+        </div>
+        <div class="card summary-card" id="card-expenses">
+          <div class="card-icon" style="background:rgba(255,119,130,0.15)">
+            <span class="material-icons-sharp" style="color:var(--color-danger)">trending_down</span>
+          </div>
+          <div class="card-info">
+            <h3 id="val-expenses">$0.00</h3>
+            <p>Total Expenses</p>
+          </div>
+        </div>
+      </section>
+
+     
+      <section class="card-transactions-row">
+        <div class="credit-card-wrapper">
+          <div class="credit-card" id="credit-card">
+            <div class="cc-top">
+              <img src="./images/logo.png" alt="Bank Logo" class="cc-bank-logo">
+              <img src="./images/card chip.png" alt="Chip" class="cc-chip">
+            </div>
+            <div class="cc-number" id="cc-number">**** **** **** 4242</div>
+            <div class="cc-bottom">
+              <div class="cc-holder">
+                <span class="cc-label">Card Holder</span>
+                <span id="cc-holder-name">JOHN DOE</span>
+              </div>
+              <div class="cc-expiry">
+                <span class="cc-label">Expires</span>
+                <span id="cc-expiry">12/27</span>
+              </div>
+              <img src="./images/visa.png" alt="Visa" class="cc-network" id="cc-network-logo">
+            </div>
+          </div>
+        </div>
+        <div class="card recent-transactions-card">
+          <div class="card-header">
+            <h2>Recent Transactions</h2>
+          </div>
+          <ul id="recent-transactions-list" class="recent-list">
+            <li class="empty-state">
+              <span class="material-icons-sharp">inbox</span>
+              <p>No transactions yet</p>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="insights-panel" id="insights-panel">
+        <div class="card insight-card">
+          <div class="insight-icon"><span class="material-icons-sharp">emoji_events</span></div>
+          <div class="insight-info">
+            <p class="insight-label">Top Spending Category</p>
+            <h3 class="insight-value" id="insight-top-cat-val">—</h3>
+          </div>
+        </div>
+        <div class="card insight-card">
+          <div class="insight-icon"><span class="material-icons-sharp">show_chart</span></div>
+          <div class="insight-info">
+            <p class="insight-label">Month-over-Month Change</p>
+            <h3 class="insight-value" id="insight-mom-val">—</h3>
+          </div>
+        </div>
+        <div class="card insight-card">
+          <div class="insight-icon"><span class="material-icons-sharp">balance</span></div>
+          <div class="insight-info">
+            <p class="insight-label">Income / Expense Ratio</p>
+            <h3 class="insight-value" id="insight-ratio-val">—</h3>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+   
+    <div class="view hidden" id="view-transactions">
+
+      <div class="view-header">
+        <h2 class="view-title">Transactions</h2>
+        <button id="add-transaction-btn" class="btn btn-primary admin-only hidden">
+          <span class="material-icons-sharp">add</span> Add Transaction
+        </button>
+      </div>
+
+     
+      <section class="card filter-bar" id="filter-bar">
+        <div class="filter-group">
+          <label for="filter-from">From</label>
+          <input type="date" id="filter-from">
+        </div>
+        <div class="filter-group">
+          <label for="filter-to">To</label>
+          <input type="date" id="filter-to">
+        </div>
+        <div class="filter-group">
+          <label for="filter-category">Category</label>
+          <select id="filter-category">
+            <option value="all">All Categories</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="filter-type">Type</label>
+          <select id="filter-type">
+            <option value="all">All Types</option>
+            <option value="income">Income</option>
+            <option value="expense">Expense</option>
+          </select>
+        </div>
+        <button id="filter-reset" class="btn btn-outline">
+          <span class="material-icons-sharp">refresh</span> Reset
+        </button>
+      </section>
+
+     
+      <section class="card transactions-section">
+        <div class="table-wrapper">
+          <table id="transactions-table">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Description</th>
+                <th>Category</th>
+                <th>Date</th>
+                <th>Amount</th>
+                <th class="admin-only hidden">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="transactions-tbody">
+              <tr><td colspan="6"><div class="empty-state">
+                <span class="material-icons-sharp">inbox</span>
+                <p>No transactions found</p>
+              </div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      
+      <section class="export-section admin-only hidden" id="export-section">
+        <button id="export-csv-btn" class="btn btn-outline">
+          <span class="material-icons-sharp">download</span> Export CSV
+        </button>
+        <button id="export-json-btn" class="btn btn-outline">
+          <span class="material-icons-sharp">data_object</span> Export JSON
+        </button>
+      </section>
+
+    </div>
+
+   
+    <div class="view hidden" id="view-analytics">
+
+      <div class="view-header">
+        <h2 class="view-title">Analytics</h2>
+      </div>
+
+      
+      <section class="summary-cards">
+        <div class="card summary-card">
+          <div class="card-icon" style="background:rgba(115,128,236,0.15)">
+            <span class="material-icons-sharp" style="color:var(--color-primary)">account_balance_wallet</span>
+          </div>
+          <div class="card-info">
+            <h3 id="val-balance-a">$0.00</h3>
+            <p>Total Balance</p>
+          </div>
+        </div>
+        <div class="card summary-card">
+          <div class="card-icon" style="background:rgba(65,241,182,0.15)">
+            <span class="material-icons-sharp" style="color:var(--color-success)">trending_up</span>
+          </div>
+          <div class="card-info">
+            <h3 id="val-income-a">$0.00</h3>
+            <p>Total Income</p>
+          </div>
+        </div>
+        <div class="card summary-card">
+          <div class="card-icon" style="background:rgba(255,119,130,0.15)">
+            <span class="material-icons-sharp" style="color:var(--color-danger)">trending_down</span>
+          </div>
+          <div class="card-info">
+            <h3 id="val-expenses-a">$0.00</h3>
+            <p>Total Expenses</p>
+          </div>
+        </div>
+      </section>
+
+     
+      <section class="charts-row">
+        <div class="card chart-card">
+          <div class="card-header"><h2>Balance Trend</h2></div>
+          <div class="chart-container">
+            <canvas id="chart-trend"></canvas>
+          </div>
+        </div>
+        <div class="card chart-card">
+          <div class="card-header"><h2>Spending Breakdown</h2></div>
+          <div class="chart-container">
+            <canvas id="chart-breakdown"></canvas>
+            <div id="breakdown-empty" class="empty-state hidden">
+              <span class="material-icons-sharp">pie_chart</span>
+              <p>No expense data</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    
+    <div class="view hidden" id="view-settings">
+
+      <div class="view-header">
+        <h2 class="view-title">Settings</h2>
+      </div>
+
+      <div class="settings-grid">
+
+        <div class="card settings-card">
+          <div class="settings-card-header">
+            <span class="material-icons-sharp">palette</span>
+            <h3>Appearance</h3>
+          </div>
+          <div class="settings-row">
+            <div>
+              <p class="settings-label">Dark Mode</p>
+              <p class="settings-desc">Switch between light and dark theme</p>
+            </div>
+            <button class="toggle-btn" id="settings-theme-toggle" aria-label="Toggle dark mode">
+              <span class="toggle-knob"></span>
+            </button>
+          </div>
+        </div>
+
+        <div class="card settings-card">
+          <div class="settings-card-header">
+            <span class="material-icons-sharp">manage_accounts</span>
+            <h3>Role</h3>
+          </div>
+          <div class="settings-row">
+            <div>
+              <p class="settings-label">Current Role</p>
+              <p class="settings-desc">Switch between Viewer and Admin</p>
+            </div>
+            <select id="settings-role-select" class="settings-select">
+              <option value="viewer">Viewer</option>
+              <option value="admin">Admin</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="card settings-card">
+          <div class="settings-card-header">
+            <span class="material-icons-sharp">credit_card</span>
+            <h3>Card Details</h3>
+          </div>
+          <div class="settings-form">
+            <div class="form-group">
+              <label for="settings-card-holder">Card Holder Name</label>
+              <input type="text" id="settings-card-holder" placeholder="John Doe">
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="settings-card-number">Last 4 Digits</label>
+                <input type="text" id="settings-card-number" maxlength="4" placeholder="4242">
+              </div>
+              <div class="form-group">
+                <label for="settings-card-expiry">Expiry (MM/YY)</label>
+                <input type="text" id="settings-card-expiry" placeholder="12/27">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="settings-card-network">Network</label>
+              <select id="settings-card-network">
+                <option value="visa">Visa</option>
+                <option value="mastercard">Mastercard</option>
+              </select>
+            </div>
+            <button id="settings-save-card" class="btn btn-primary" style="margin-top:0.5rem">
+              <span class="material-icons-sharp">save</span> Save Card
+            </button>
+          </div>
+        </div>
+
+        <div class="card settings-card">
+          <div class="settings-card-header">
+            <span class="material-icons-sharp">delete_forever</span>
+            <h3>Data</h3>
+          </div>
+          <div class="settings-row">
+            <div>
+              <p class="settings-label">Reset All Data</p>
+              <p class="settings-desc">Clear all transactions and restore demo data</p>
+            </div>
+            <button id="settings-reset-data" class="btn btn-outline" style="color:var(--color-danger);border-color:var(--color-danger)">
+              <span class="material-icons-sharp">restart_alt</span> Reset
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+ 
+  <dialog id="transaction-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="modal-title">Add Transaction</h2>
+        <button id="modal-close" class="btn-icon" aria-label="Close">
+          <span class="material-icons-sharp">close</span>
+        </button>
+      </div>
+      <form id="transaction-form" novalidate>
+        <input type="hidden" id="edit-id">
+        <div class="form-group">
+          <label for="form-description">Description</label>
+          <input type="text" id="form-description" placeholder="e.g. McDonald's" required>
+          <span class="field-error" id="err-description"></span>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="form-amount">Amount ($)</label>
+            <input type="number" id="form-amount" placeholder="0.00" min="0.01" step="0.01" required>
+            <span class="field-error" id="err-amount"></span>
+          </div>
+          <div class="form-group">
+            <label for="form-type">Type</label>
+            <select id="form-type" required>
+              <option value="">Select type</option>
+              <option value="income">Income</option>
+              <option value="expense">Expense</option>
+            </select>
+            <span class="field-error" id="err-type"></span>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="form-category">Category</label>
+            <select id="form-category" required>
+              <option value="">Select category</option>
+              <option value="Food">Food</option>
+              <option value="Entertainment">Entertainment</option>
+              <option value="Transport">Transport</option>
+              <option value="Shopping">Shopping</option>
+              <option value="Crypto">Crypto</option>
+              <option value="Currency">Currency</option>
+              <option value="Other">Other</option>
+            </select>
+            <span class="field-error" id="err-category"></span>
+          </div>
+          <div class="form-group">
+            <label for="form-date">Date</label>
+            <input type="date" id="form-date" required>
+            <span class="field-error" id="err-date"></span>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button type="button" id="modal-cancel" class="btn btn-outline">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Transaction</button>
+        </div>
+      </form>
+    </div>
+  </dialog>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
